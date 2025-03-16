@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/gift.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/player.css">
+    <title>playlist</title>
+</head>
+<body>
+    <div class="night"></div>
+
+    <div class="player-container">
+        <!-- Album Cover and Song Info -->
+        <div class="music-box">
+            <div class="cover-wrapper">
+                <img src="playlist/cv-images/from-the-start.png" alt="Album Cover" class="cover-art" id="cover">
+                <div class="cover-overlay"></div>
+            </div>
+
+            <div class="song-info">
+                <h2 class="song-title">From The Start</h2>
+                <p class="artist">Laufey</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="time-info">
+                    <span class="current-time">0:00</span>
+                    <span class="total-time">0:00</span>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="controls">
+                <button class="control-btn previous">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 20L9 12L19 4V20Z M5 19V5" stroke-width="2"/>
+                    </svg>
+                </button>
+                
+                <button class="control-btn play-pause">
+                    <svg class="play" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M8 5v14l11-7z" stroke-width="2"/>
+                    </svg>
+                    <svg class="pause hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" stroke-width="2"/>
+                    </svg>
+                </button>
+                
+                <button class="control-btn next">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M5 4L15 12L5 20V4Z M19 5V19" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Playlist -->
+        <div class="playlist">
+            <div class="playlist-item active" data-song="from-the-start">
+                <img src="playlist/cv-images/from-the-start.png" alt="From The Start">
+                <div class="song-details">
+                    <span class="song-name">From The Start</span>
+                    <span class="song-artist">Laufey</span>
+                </div>
+            </div>
+            
+            <div class="playlist-item" data-song="seasons">
+                <img src="playlist/cv-images/seasons.png" alt="Wave to Earth">
+                <div class="song-details">
+                    <span class="song-name">Seasons</span>
+                    <span class="song-artist">Wave to Earth</span>
+                </div>
+            </div>
+            
+            <div class="playlist-item" data-song="the-perfect-pair">
+                <img src="playlist/cv-images/the-perfect-pair.png" alt="The Perfect Pair">
+                <div class="song-details">
+                    <span class="song-name">The Perfect Pair</span>
+                    <span class="song-artist">Beabadoobee</span>
+                </div>
+            </div>
+            
+            <div class="playlist-item" data-song="feels">
+                <img src="playlist/cv-images/feels.png" alt="Feels">
+                <div class="song-details">
+                    <span class="song-name">Feels</span>
+                    <span class="song-artist">Calvin Harris</span>
+                </div>
+            </div>
+            
+            <div class="playlist-item" data-song="homage">
+                <img src="playlist/cv-images/homage.png" alt="Homage">
+                <div class="song-details">
+                    <span class="song-name">Homage</span>
+                    <span class="song-artist">Mild High Club</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <a href="flower.html" class="back-btn">
+        <svg height="16" width="16" fill="#FFFFFF" viewBox="0 0 24 24" class="back-icon">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        <span class="back-text">Back</span>
+    </a>
+
+    <script src="js/player.js"></script>
+</body>
+</html>
