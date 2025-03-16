@@ -8,9 +8,9 @@ class MusicPlayer {
                 cover: 'playlist/cv-images/from-the-start.png'
             },
             {
-                title: 'Wave to Earth',
+                title: 'Seasons',
                 artist: 'Wave to Earth',
-                file: 'playlist/songs/wave-to-earth.mp3',
+                file: 'playlist/songs/seasons.mp3',
                 cover: 'playlist/cv-images/wave-to-earth.png'
             },
             {
