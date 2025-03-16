@@ -11,7 +11,7 @@ class MusicPlayer {
                 title: 'Seasons',
                 artist: 'Wave to Earth',
                 file: 'playlist/songs/seasons.mp3',
-                cover: 'playlist/cv-images/wave-to-earth.png'
+                cover: 'playlist/cv-images/seasons.png'
             },
             {
                 title: 'The Perfect Pair',
