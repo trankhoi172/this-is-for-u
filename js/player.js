@@ -8,10 +8,10 @@ class MusicPlayer {
                 cover: 'playlist/cv-images/from-the-start.png'
             },
             {
-                title: 'Seasons',
+                title: 'Wave to Earth',
                 artist: 'Wave to Earth',
-                file: 'playlist/songs/seasons.mp3',
-                cover: 'playlist/cv-images/seasons.png'
+                file: 'playlist/songs/wave-to-earth.mp3',
+                cover: 'playlist/cv-images/wave-to-earth.png'
             },
             {
                 title: 'The Perfect Pair',
@@ -21,7 +21,7 @@ class MusicPlayer {
             },
             {
                 title: 'Feels',
-                artist: 'Calvin Harris',
+                artist: 'Watts',
                 file: 'playlist/songs/feels.mp3',
                 cover: 'playlist/cv-images/feels.png'
             },
@@ -35,6 +35,7 @@ class MusicPlayer {
 
         this.currentSongIndex = 0;
         this.isPlaying = false;
+        this.isDragging = false;
         this.audio = new Audio();
         this.initializePlayer();
     }
@@ -65,9 +66,16 @@ class MusicPlayer {
         this.prevBtn.addEventListener('click', () => this.prevSong());
         this.nextBtn.addEventListener('click', () => this.nextSong());
 
-        // Progress bar
-        this.progressBar.addEventListener('click', (e) => this.setProgress(e));
+        // Progress bar events
+        this.progressBar.addEventListener('mousedown', (e) => this.startDragging(e));
+        document.addEventListener('mousemove', (e) => this.dragging(e));
+        document.addEventListener('mouseup', () => this.stopDragging());
         
+        // Touch events for mobile
+        this.progressBar.addEventListener('touchstart', (e) => this.startDragging(e));
+        document.addEventListener('touchmove', (e) => this.dragging(e));
+        document.addEventListener('touchend', () => this.stopDragging());
+
         // Audio events
         this.audio.addEventListener('timeupdate', () => this.updateProgress());
         this.audio.addEventListener('ended', () => this.nextSong());
@@ -80,10 +88,54 @@ class MusicPlayer {
             item.addEventListener('click', () => {
                 this.currentSongIndex = index;
                 this.loadSong(index);
-                this.play();
                 this.updatePlaylistUI();
+                this.play(); // Auto-play when clicking playlist item
             });
         });
+
+        // Space bar to toggle play/pause
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && e.target === document.body) {
+                e.preventDefault();
+                this.togglePlay();
+            }
+        });
+    }
+
+    startDragging(e) {
+        this.isDragging = true;
+        this.progressBar.classList.add('dragging');
+        this.handleProgressBarInteraction(e);
+    }
+
+    dragging(e) {
+        if (!this.isDragging) return;
+        this.handleProgressBarInteraction(e);
+    }
+
+    stopDragging() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+        this.progressBar.classList.remove('dragging');
+    }
+
+    handleProgressBarInteraction(e) {
+        const rect = this.progressBar.getBoundingClientRect();
+        let x;
+        
+        if (e.type.startsWith('touch')) {
+            x = e.touches[0].clientX - rect.left;
+        } else {
+            x = e.clientX - rect.left;
+        }
+
+        const width = rect.width;
+        const percentage = Math.min(Math.max(x / width, 0), 1);
+        this.progress.style.width = `${percentage * 100}%`;
+        
+        if (this.isDragging) {
+            this.audio.currentTime = percentage * this.audio.duration;
+        }
     }
 
     loadSong(index) {
@@ -105,7 +157,16 @@ class MusicPlayer {
             this.coverArt.style.opacity = '1';
             this.songTitle.style.opacity = '1';
             this.artistName.style.opacity = '1';
+
+            // If was playing before loading new song, start playing automatically
+            if (this.isPlaying) {
+                this.play();
+            }
         }, 300);
+
+        // Reset progress
+        this.progress.style.width = '0%';
+        this.currentTimeSpan.textContent = '0:00';
     }
 
     updatePlaylistUI() {
@@ -130,7 +191,15 @@ class MusicPlayer {
         this.isPlaying = true;
         this.playPauseBtn.querySelector('.play').classList.add('hidden');
         this.playPauseBtn.querySelector('.pause').classList.remove('hidden');
-        this.audio.play();
+        
+        // Use play() with error handling
+        const playPromise = this.audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Playback error:", error);
+                // Handle the error appropriately
+            });
+        }
     }
 
     pause() {
@@ -147,7 +216,7 @@ class MusicPlayer {
         }
         this.loadSong(this.currentSongIndex);
         this.updatePlaylistUI();
-        if (this.isPlaying) this.play();
+        this.play(); // Auto-play when changing songs
     }
 
     nextSong() {
@@ -157,18 +226,11 @@ class MusicPlayer {
         }
         this.loadSong(this.currentSongIndex);
         this.updatePlaylistUI();
-        if (this.isPlaying) this.play();
-    }
-
-    setProgress(e) {
-        const width = this.progressBar.clientWidth;
-        const clickX = e.offsetX;
-        const duration = this.audio.duration;
-        this.audio.currentTime = (clickX / width) * duration;
+        this.play(); // Auto-play when changing songs
     }
 
     updateProgress() {
-        if (this.audio.duration) {
+        if (!this.isDragging && this.audio.duration) {
             const progressPercent = (this.audio.currentTime / this.audio.duration) * 100;
             this.progress.style.width = `${progressPercent}%`;
             this.currentTimeSpan.textContent = this.formatTime(this.audio.currentTime);
@@ -176,13 +238,14 @@ class MusicPlayer {
     }
 
     formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
 }
 
-// Initialize player when page loads
+// Initialize player when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new MusicPlayer();
 });
