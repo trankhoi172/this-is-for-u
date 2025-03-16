@@ -1,5 +1,5 @@
 const title = document.querySelector('.title');
-const text = 'This is for you, Kate!'.split('');
+const text = 'I Have Something'.split('');
 
 // Create and animate title letters
 for (let index = 0; index < text.length; index++) {
